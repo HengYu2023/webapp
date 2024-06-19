@@ -19,11 +19,10 @@ public partial class NorthwindContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
-    public virtual DbSet<Supplier> Suppliers { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=(localdb)\\mssqllocaldb;Database=Northwind;integrated security=True;");
+        => optionsBuilder.UseSqlServer("Data Source=localhost;user id=sa;password=Aaa010186d8;Database=Northwind;TrustServerCertificate=True;");
+    //=> optionsBuilder.UseSqlServer("Data Source=(localdb)\\mssqllocaldb;Database=Northwind;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -64,30 +63,6 @@ public partial class NorthwindContext : DbContext
             entity.HasOne(d => d.Category).WithMany(p => p.Products)
                 .HasForeignKey(d => d.CategoryId)
                 .HasConstraintName("FK_Products_Categories");
-
-            entity.HasOne(d => d.Supplier).WithMany(p => p.Products)
-                .HasForeignKey(d => d.SupplierId)
-                .HasConstraintName("FK_Products_Suppliers");
-        });
-
-        modelBuilder.Entity<Supplier>(entity =>
-        {
-            entity.HasIndex(e => e.CompanyName, "CompanyName");
-
-            entity.HasIndex(e => e.PostalCode, "PostalCode");
-
-            entity.Property(e => e.SupplierId).HasColumnName("SupplierID");
-            entity.Property(e => e.Address).HasMaxLength(60);
-            entity.Property(e => e.City).HasMaxLength(15);
-            entity.Property(e => e.CompanyName).HasMaxLength(40);
-            entity.Property(e => e.ContactName).HasMaxLength(30);
-            entity.Property(e => e.ContactTitle).HasMaxLength(30);
-            entity.Property(e => e.Country).HasMaxLength(15);
-            entity.Property(e => e.Fax).HasMaxLength(24);
-            entity.Property(e => e.HomePage).HasColumnType("ntext");
-            entity.Property(e => e.Phone).HasMaxLength(24);
-            entity.Property(e => e.PostalCode).HasMaxLength(10);
-            entity.Property(e => e.Region).HasMaxLength(15);
         });
 
         OnModelCreatingPartial(modelBuilder);
