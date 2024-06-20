@@ -18,9 +18,60 @@ namespace WebApi.Controllers
 
             if (ctg == null)
             {
-                return BadRequest("Invalid ID.");
+                return NotFound();
+                //return BadRequest("Invalid ID.");
             }
             return Ok(ctg);
+        }
+
+        [HttpPost]
+        public IActionResult Create(Category category)
+        {
+            if (category == null)
+            {
+                return BadRequest();
+            }
+            
+            using (var context = new NorthwindContext())
+            {                
+                context.Categories.Add(category);
+                context.SaveChanges();
+            }
+            return Ok();
+        }
+
+        [HttpPut]
+        public IActionResult Put(Category category)
+        {
+            if (category == null)
+            {
+                return BadRequest();
+            }
+            
+
+            using (var context = new NorthwindContext())
+            {               
+                context.Categories.Update(category);
+                context.SaveChanges();
+            }
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(Category category)
+        {            
+            using( var context = new NorthwindContext())
+            {
+                if (category == null)
+                {
+                    return NotFound();
+                    //return BadRequest("Invalid ctgId.");
+                }
+                context.Categories.Remove(category);
+                context.SaveChanges();
+            }
+            return Ok($"Remove {category}.");
         }
     }
 }

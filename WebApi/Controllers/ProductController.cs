@@ -8,23 +8,9 @@ namespace WebApi.Controllers
     [Route("PRD")]             //直接指定api名稱
     public class ProductController : ControllerBase
     {
-        [HttpPost]
-        public IActionResult AddPRD(string prdName, bool discontinued)
-        {
-            Product? prd;
-            using (var context = new NorthwindContext())
-            {
-                prd = new Product { ProductName = prdName, Discontinued = discontinued };
-                //context.Products.Add(prd);
-                context.Products.Add(prd);
-                context.SaveChanges();
-            }
-
-            return Ok(prd);
-        }
 
         [HttpGet]
-        public IActionResult GetPRD(int prdId)
+        public IActionResult Get(int prdId)
         {
             Product? prd;
             using (var context = new NorthwindContext())
@@ -34,53 +20,60 @@ namespace WebApi.Controllers
 
             if (prd == null)
             {
-                return BadRequest("Invalid ID.");
+                return NotFound();
+                //return BadRequest("Invalid ID.");
+            }
+            return Ok(prd);
+        }
+
+        [HttpPost]
+        public IActionResult Create(Product product)
+        {
+            if (product == null)
+            {
+                return BadRequest();
             }
 
-            return Ok(prd);
+            using (var context = new NorthwindContext())
+            {
+                context.Products.Add(product);
+                context.SaveChanges();
+            }
+            return Ok();
         }
 
         [HttpPut]
-        public IActionResult PutPRD(int prdId, string prdName)
+        public IActionResult Put(Product product)
         {
-            Product? prd;
-            using (var context = new NorthwindContext())
+            if (product == null)
             {
-                var contextPrd = context.Products;
-                prd = contextPrd.Find(prdId);
+                return BadRequest();
+            }
 
-                if (prd == null)
-                {
-                    prd = new Product { ProductName = prdName, Discontinued = true };
-                    contextPrd.Add(prd);
-                }
-                else
-                {
-                    prd.ProductName = prdName;
-                    contextPrd.Update(prd);
-                }
 
+            using (var context = new NorthwindContext())
+            {              
+                context.Products.Update(product);
                 context.SaveChanges();
             }
 
-            return Ok(prd);
+            return Ok();
         }
 
         [HttpDelete]
-        public IActionResult DeletePRD(int prdId)
+        public IActionResult Delete(Product product)
         {
-            Product? prd;
             using (var context = new NorthwindContext())
             {
-                prd = context.Categories.Find(ctgId);
-                if (prd == null)
+                if (product == null)
                 {
-                    return BadRequest("Invalid ctgId.");
+                    return NotFound();
+                    //return BadRequest("Invalid ctgId.");
                 }
-                context.Remove(prd);
+                context.Products.Remove(product);
                 context.SaveChanges();
             }
-            return Ok($"Remove {ctgId} Category.");
+            return Ok($"Remove {product}.");
         }
     }
 }
