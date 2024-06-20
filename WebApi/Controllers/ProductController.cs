@@ -1,4 +1,6 @@
+using DataAccess.Interface;
 using DataAccess.Models;
+using DataAccess.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -8,15 +10,13 @@ namespace WebApi.Controllers
     [Route("PRD")]             //直接指定api名稱
     public class ProductController : ControllerBase
     {
+        private readonly IProductRepository _prdRepo = new ProductRepository();
 
         [HttpGet]
         public IActionResult Get(int prdId)
         {
-            Product? prd;
-            using (var context = new NorthwindContext())
-            {
-                prd = context.Products.Find(prdId);
-            }
+            var prd = _prdRepo.GetById(prdId);
+
 
             if (prd == null)
             {
@@ -34,11 +34,9 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
 
-            using (var context = new NorthwindContext())
-            {
-                context.Products.Add(product);
-                context.SaveChanges();
-            }
+            _prdRepo.Add(product);
+            _prdRepo.SaveChanges();
+
             return Ok();
         }
 
@@ -50,12 +48,8 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
 
-
-            using (var context = new NorthwindContext())
-            {              
-                context.Products.Update(product);
-                context.SaveChanges();
-            }
+            _prdRepo.Update(product);
+            _prdRepo.SaveChanges();
 
             return Ok();
         }
@@ -63,16 +57,16 @@ namespace WebApi.Controllers
         [HttpDelete]
         public IActionResult Delete(Product product)
         {
-            using (var context = new NorthwindContext())
+
+            if (product == null)
             {
-                if (product == null)
-                {
-                    return NotFound();
-                    //return BadRequest("Invalid ctgId.");
-                }
-                context.Products.Remove(product);
-                context.SaveChanges();
+                return NotFound();
+                //return BadRequest("Invalid ctgId.");
             }
+
+            _prdRepo.Delete(product);
+            _prdRepo.SaveChanges();
+
             return Ok($"Remove {product}.");
         }
     }

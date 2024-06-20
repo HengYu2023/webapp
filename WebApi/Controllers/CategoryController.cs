@@ -1,20 +1,20 @@
 ﻿using DataAccess.Models;
+using DataAccess.Repository;
+using DataAccess.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
     [ApiController]
     [Route("Category")]
-    public class CategoryController :ControllerBase
+    public class CategoryController : ControllerBase
     {
+        private readonly ICategoryRepository _ctgRepo = new CategoryRepository();
         [HttpGet]
         public IActionResult Get(int ctgId)
         {
-            Category? ctg;
-            using(var context = new NorthwindContext())
-            {
-                ctg = context.Categories.Find(ctgId);
-            }
+            Category? ctg = _ctgRepo.GetById(ctgId);
+            
 
             if (ctg == null)
             {
@@ -32,11 +32,9 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
             
-            using (var context = new NorthwindContext())
-            {                
-                context.Categories.Add(category);
-                context.SaveChanges();
-            }
+            _ctgRepo.Add(category);
+            _ctgRepo.SaveChanges();
+            
             return Ok();
         }
 
@@ -47,31 +45,25 @@ namespace WebApi.Controllers
             {
                 return BadRequest();
             }
-            
 
-            using (var context = new NorthwindContext())
-            {               
-                context.Categories.Update(category);
-                context.SaveChanges();
-            }
+            _ctgRepo.Update(category);
+            _ctgRepo.SaveChanges();
 
             return Ok();
         }
 
         [HttpDelete]
         public IActionResult Delete(Category category)
-        {            
-            using( var context = new NorthwindContext())
+        {
+            if (category == null)
             {
-                if (category == null)
-                {
-                    return NotFound();
-                    //return BadRequest("Invalid ctgId.");
-                }
-                context.Categories.Remove(category);
-                context.SaveChanges();
+                return BadRequest();
             }
-            return Ok($"Remove {category}.");
+
+            _ctgRepo.Delete(category);
+            _ctgRepo.SaveChanges();
+
+            return Ok();
         }
     }
 }
