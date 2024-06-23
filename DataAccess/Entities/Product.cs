@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DataAccess.Models;
+namespace DataAccess.Entities;
 
-public partial class Product
+public partial class Product : BaseEntity
 {
     public int ProductId { get; set; }
 

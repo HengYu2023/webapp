@@ -1,6 +1,6 @@
 using DataAccess.Interface;
-using DataAccess.Models;
-using DataAccess.Repository;
+using DataAccess.Entities;
+using DataAccess.EFRepository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -10,7 +10,7 @@ namespace WebApi.Controllers
     [Route("PRD")]             //直接指定api名稱
     public class ProductController : ControllerBase
     {
-        private readonly IProductRepository _prdRepo = new ProductRepository();
+        private readonly IRepository<Product> _prdRepo = new EFProductRepository();
 
         [HttpGet]
         public IActionResult Get(int prdId)
@@ -23,7 +23,40 @@ namespace WebApi.Controllers
                 return NotFound();
                 //return BadRequest("Invalid ID.");
             }
+
             return Ok(prd);
+        }
+        
+        [HttpGet]
+        [Route("AllProduct")]
+        public IActionResult GetALL()
+        {
+            var prds = _prdRepo.GetAll();
+
+
+            if (prds == null)
+            {
+                return NotFound();
+                //return BadRequest("Invalid ID.");
+            }
+
+            return Ok(prds);
+        }
+
+        [HttpGet]
+        [Route("ProductOfCategory")]
+        public IActionResult Get()
+        {
+            var prds = _prdRepo.GetAll();
+
+
+            if (prds == null)
+            {
+                return NotFound();
+                //return BadRequest("Invalid ID.");
+            }
+
+            return Ok(prds);
         }
 
         [HttpPost]
@@ -34,8 +67,8 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
 
-            _prdRepo.Add(product);
-            _prdRepo.SaveChanges();
+            _prdRepo.Insert(product);
+            _prdRepo.Save();
 
             return Ok();
         }
@@ -49,25 +82,18 @@ namespace WebApi.Controllers
             }
 
             _prdRepo.Update(product);
-            _prdRepo.SaveChanges();
+            _prdRepo.Save();
 
             return Ok();
         }
 
         [HttpDelete]
-        public IActionResult Delete(Product product)
-        {
+        public IActionResult Delete(int prdId)
+        {          
+            _prdRepo.Delete(prdId);
+            _prdRepo.Save();
 
-            if (product == null)
-            {
-                return NotFound();
-                //return BadRequest("Invalid ctgId.");
-            }
-
-            _prdRepo.Delete(product);
-            _prdRepo.SaveChanges();
-
-            return Ok($"Remove {product}.");
+            return Ok($"Remove {prdId} product.");
         }
     }
 }

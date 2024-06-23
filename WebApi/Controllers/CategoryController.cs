@@ -1,5 +1,5 @@
-﻿using DataAccess.Models;
-using DataAccess.Repository;
+﻿using DataAccess.Entities;
+using DataAccess.EFRepository;
 using DataAccess.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +9,7 @@ namespace WebApi.Controllers
     [Route("Category")]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryRepository _ctgRepo = new CategoryRepository();
+        private readonly IRepository<Category> _ctgRepo = new EFCategoryRepository();
         [HttpGet]
         public IActionResult Get(int ctgId)
         {
@@ -32,8 +32,8 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
             
-            _ctgRepo.Add(category);
-            _ctgRepo.SaveChanges();
+            _ctgRepo.Insert(category);
+            _ctgRepo.Save();
             
             return Ok();
         }
@@ -47,23 +47,18 @@ namespace WebApi.Controllers
             }
 
             _ctgRepo.Update(category);
-            _ctgRepo.SaveChanges();
+            _ctgRepo.Save();
 
             return Ok();
         }
 
         [HttpDelete]
-        public IActionResult Delete(Category category)
-        {
-            if (category == null)
-            {
-                return BadRequest();
-            }
+        public IActionResult Delete(int ctgId)
+        {           
+            _ctgRepo.Delete(ctgId);
+            _ctgRepo.Save();
 
-            _ctgRepo.Delete(category);
-            _ctgRepo.SaveChanges();
-
-            return Ok();
+            return Ok($"Remove {ctgId} category.");
         }
     }
 }

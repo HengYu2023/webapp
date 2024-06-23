@@ -1,4 +1,4 @@
-﻿using DataAccess.Models;
+﻿using DataAccess.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +7,8 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Interface
 {
-    public interface IProductRepository
+    public interface IProductRepository : IRepository<Product>
     {
-        void Add(Product product);
-        void Update(Product product);
-        void Delete(Product product);
-        Product GetById(int id);
-        IQueryable<Product> GetAll();
-        void SaveChanges();
+        IEnumerable<Product> GetByCategry(int ctgId);
     }
 }

@@ -1,4 +1,4 @@
-﻿using DataAccess.Models;
+﻿using DataAccess.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +7,8 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Interface
 {
-    public interface ICategoryRepository
+    public interface ICategoryRepository : IRepository<Category>
     {
-        void Add(Category category);
-        void Update(Category category);
-        void Delete(Category category);
-        Category GetById(int ctgId);
-        IQueryable<Category> GetAll();
-        void SaveChanges();
+        Category GetByProduct(int prdId);
     }
 }

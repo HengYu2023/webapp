@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DataAccess.Models;
+namespace DataAccess.Entities;
 
-public partial class Category
+public partial class Category : BaseEntity
 {
     public int CategoryId { get; set; }
 
