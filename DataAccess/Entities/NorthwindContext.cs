@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Entities;
 
@@ -18,10 +19,11 @@ public partial class NorthwindContext : DbContext
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
-
+   
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Data Source=localhost;user id=sa;password=Aaa010186d8;Database=Northwind;TrustServerCertificate=True;");
-    //=> optionsBuilder.UseSqlServer("Data Source=(localdb)\\mssqllocaldb;Database=Northwind;");
+        => optionsBuilder.UseSqlServer(new ConfigurationBuilder().AddUserSecrets<NorthwindContext>().Build()["ConnectionStrings:NorthwindConnection"]);
+      //=> optionsBuilder.UseSqlServer("Data Source=localhost;user id=sa;password=Aaa010186d8;Database=Northwind;TrustServerCertificate=True;");
+      //=> optionsBuilder.UseSqlServer("Data Source=(localdb)\\mssqllocaldb;Database=Northwind;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
