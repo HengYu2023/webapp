@@ -2,18 +2,20 @@
 using DataAccess.EFRepository;
 using DataAccess.Interface;
 using Microsoft.AspNetCore.Mvc;
+using CoreBusiness.Interface;
+using CoreBusiness.Service;
 
 namespace WebApi.Controllers
 {
     [ApiController]
     [Route("Category")]
     public class CategoryController : ControllerBase
-    {
-        private readonly IRepository<Category> _ctgRepo = new EFCategoryRepository();
+    {        
+        private readonly ICategoryService _categoryService = new CategoryService();
         [HttpGet]
         public IActionResult Get(int ctgId)
         {
-            Category? ctg = _ctgRepo.GetById(ctgId);
+            Category? ctg = _categoryService.Get(ctgId);
             
 
             if (ctg == null)
@@ -24,6 +26,37 @@ namespace WebApi.Controllers
             return Ok(ctg);
         }
 
+        [HttpGet]
+        [Route("AllProduct")]
+        public IActionResult GetAll()
+        {
+            var prds = _categoryService.GetAll();
+
+
+            if (prds == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(prds);
+        }
+
+        [HttpGet]
+        [Route("ProductCategory")]
+        public IActionResult GetByCategory(int ctgId)
+        {
+            var prds = _categoryService.GetProductCategory(ctgId);
+
+
+            if (prds == null)
+            {
+                return NotFound();
+                //return BadRequest("Invalid ID.");
+            }
+
+            return Ok(prds);
+        }
+
         [HttpPost]
         public IActionResult Create(Category category)
         {
@@ -31,9 +64,8 @@ namespace WebApi.Controllers
             {
                 return BadRequest();
             }
-            
-            _ctgRepo.Insert(category);
-            _ctgRepo.Save();
+
+            _categoryService.Insert(category);
             
             return Ok();
         }
@@ -46,17 +78,15 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
 
-            _ctgRepo.Update(category);
-            _ctgRepo.Save();
+            _categoryService.Update(category);
 
             return Ok();
         }
 
         [HttpDelete]
         public IActionResult Delete(int ctgId)
-        {           
-            _ctgRepo.Delete(ctgId);
-            _ctgRepo.Save();
+        {
+            _categoryService.Delete(ctgId);
 
             return Ok($"Remove {ctgId} category.");
         }
