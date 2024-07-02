@@ -11,7 +11,13 @@ namespace WebApi.Controllers
     [Route("Category")]
     public class CategoryController : ControllerBase
     {        
-        private readonly ICategoryService _categoryService = new CategoryService();
+        private readonly ICategoryService _categoryService;
+
+        public CategoryController(NorthwindContext context)
+        {
+            _categoryService = new CategoryService(context);
+        }
+
         [HttpGet]
         public IActionResult Get(int ctgId)
         {

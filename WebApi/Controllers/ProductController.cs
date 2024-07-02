@@ -8,11 +8,16 @@ using CoreBusiness.Service;
 namespace WebApi.Controllers
 {
     [ApiController]
-    //[Route("[controller]")]   //route¥Îcontroller¦WºÙ
-    [Route("PRD")]             //ª½±µ«ü©wapi¦WºÙ
+    //[Route("[controller]")]   //routeï¿½ï¿½controllerï¿½Wï¿½ï¿½
+    [Route("PRD")]             //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½wapiï¿½Wï¿½ï¿½
     public class ProductController : ControllerBase
     {        
-        private readonly IProductService _prdService = new ProductService();
+        private readonly IProductService _prdService;
+
+        public ProductController(NorthwindContext context)
+        {
+            _prdService = new ProductService(context);
+        }
 
         [HttpGet]
         public IActionResult Get(int prdId)

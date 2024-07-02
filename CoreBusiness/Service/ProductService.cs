@@ -12,7 +12,13 @@ namespace CoreBusiness.Service
 {
     public class ProductService : IProductService
     {
-        private readonly IRepository<Product> _productRepo = new EFRepository<Product>();
+        private readonly IRepository<Product> _productRepo;
+
+        public ProductService(NorthwindContext context)
+        {
+            _productRepo = new EFRepository<Product>(context);
+        }
+
         public IEnumerable<Product> GetByCategry(int ctgId)
         {
             return _productRepo.GetAll().Where(p => p.CategoryId == ctgId);

@@ -14,9 +14,9 @@ namespace DataAccess.EFRepository
         private readonly NorthwindContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public EFRepository()
+        public EFRepository(NorthwindContext northwindContext)
         {
-            _context = new();
+            _context = northwindContext;
             _dbSet = _context.Set<T>();
         }
         public T GetById(int id)

@@ -12,7 +12,13 @@ namespace CoreBusiness.Service
 {
     public class CategoryService : ICategoryService
     {
-        private readonly IRepository<Category> _categoryRepository = new EFRepository<Category>();
+        private readonly IRepository<Category> _categoryRepository;
+
+        public CategoryService(NorthwindContext northwindContext)
+        {
+            _categoryRepository = new EFRepository<Category>(northwindContext);
+        }
+
         public Category Get(int id)
         {
             return _categoryRepository.GetById(id);
