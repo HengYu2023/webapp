@@ -1,3 +1,5 @@
+using CoreBusiness.Interface;
+using CoreBusiness.Service;
 using DataAccess.EFRepository;
 using DataAccess.Entities;
 using DataAccess.Interface;
@@ -11,6 +13,8 @@ builder.Services.AddDbContext<NorthwindContext>(options=> options.UseSqlServer(s
 
 builder.Services.AddScoped<IRepository<Product>,EFRepository<Product>>();
 builder.Services.AddScoped<IRepository<Category>,EFRepository<Category>>();
+builder.Services.AddScoped<ICategoryService,CategoryService>();
+builder.Services.AddScoped<IProductService,ProductService>();
 
 builder.Services.AddControllers();
 

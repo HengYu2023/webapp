@@ -14,9 +14,9 @@ namespace WebApi.Controllers
     {        
         private readonly IProductService _prdService;
 
-        public ProductController(IRepository<Product> productRepo)
+        public ProductController(IProductService productService)
         {
-            _prdService = new ProductService(productRepo);
+            _prdService = productService;
         }
 
         [HttpGet]

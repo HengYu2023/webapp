@@ -13,9 +13,9 @@ namespace WebApi.Controllers
     {        
         private readonly ICategoryService _categoryService;
 
-        public CategoryController(IRepository<Category> categoryRepo)
+        public CategoryController(ICategoryService categoryService)
         {
-            _categoryService = new CategoryService(categoryRepo);
+            _categoryService = categoryService;
         }
 
         [HttpGet]
