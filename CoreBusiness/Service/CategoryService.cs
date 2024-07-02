@@ -12,44 +12,44 @@ namespace CoreBusiness.Service
 {
     public class CategoryService : ICategoryService
     {
-        private readonly IRepository<Category> _categoryRepository;
+        private readonly IRepository<Category> _categoryRepo;
 
-        public CategoryService(NorthwindContext northwindContext)
+        public CategoryService(IRepository<Category> categoryRepo)
         {
-            _categoryRepository = new EFRepository<Category>(northwindContext);
+            _categoryRepo = categoryRepo;
         }
 
         public Category Get(int id)
         {
-            return _categoryRepository.GetById(id);
+            return _categoryRepo.GetById(id);
         }
 
         public Category GetProductCategory(int prdId)
         {
-            return _categoryRepository.GetAll().FirstOrDefault(c => c.Products.Any(p => p.ProductId == prdId));
+            return _categoryRepo.GetAll().FirstOrDefault(c => c.Products.Any(p => p.ProductId == prdId));
         }
 
         public void Insert(Category category)
         {
-            _categoryRepository.Insert(category);
-            _categoryRepository.Save();
+            _categoryRepo.Insert(category);
+            _categoryRepo.Save();
 
         }
 
         public void Update(Category category)
         {
-            _categoryRepository.Update(category);
-            _categoryRepository.Save();
+            _categoryRepo.Update(category);
+            _categoryRepo.Save();
         }
         public void Delete(int id)
         {
-            _categoryRepository.Delete(id);
-            _categoryRepository.Save();
+            _categoryRepo.Delete(id);
+            _categoryRepo.Save();
         }
 
         public IEnumerable<Category> GetAll()
         {
-            return _categoryRepository.GetAll();
+            return _categoryRepo.GetAll();
         }
     }
 }

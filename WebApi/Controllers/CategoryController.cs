@@ -13,9 +13,9 @@ namespace WebApi.Controllers
     {        
         private readonly ICategoryService _categoryService;
 
-        public CategoryController(NorthwindContext context)
+        public CategoryController(IRepository<Category> categoryRepo)
         {
-            _categoryService = new CategoryService(context);
+            _categoryService = new CategoryService(categoryRepo);
         }
 
         [HttpGet]

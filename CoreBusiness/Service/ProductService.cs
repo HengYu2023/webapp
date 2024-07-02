@@ -14,9 +14,9 @@ namespace CoreBusiness.Service
     {
         private readonly IRepository<Product> _productRepo;
 
-        public ProductService(NorthwindContext context)
+        public ProductService(IRepository<Product> productRepo)
         {
-            _productRepo = new EFRepository<Product>(context);
+            _productRepo = productRepo;
         }
 
         public IEnumerable<Product> GetByCategry(int ctgId)
