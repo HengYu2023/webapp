@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CoreBusiness.Dto;
 
 namespace CoreBusiness.Interface
 {
     public interface ICategoryService
     {
-        Category Get(int id);
-        IEnumerable<Category> GetAll();
-        Category GetProductCategory(int productId);
-        void Insert(Category category);
-        void Update(Category category);
+        CategoryDto Get(int id);
+        IEnumerable<CategoryDto> GetAll();
+        CategoryDto GetProductCategory(int productId);
+        void Insert(CategoryDto category);
+        void Update(CategoryDto categoryDto);
         void Delete(int id);
     }
 }

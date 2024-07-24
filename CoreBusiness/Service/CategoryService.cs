@@ -7,38 +7,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using CoreBusiness.Dto;
 
 namespace CoreBusiness.Service
 {
     public class CategoryService : ICategoryService
     {
         private readonly IRepository<Category> _categoryRepo;
+        private readonly IMapper _mapper;
 
-        public CategoryService(IRepository<Category> categoryRepo)
+        public CategoryService(IRepository<Category> categoryRepo,
+                                IMapper mapper)
         {
             _categoryRepo = categoryRepo;
+            _mapper = mapper;
         }
 
-        public Category Get(int id)
+        public CategoryDto Get(int id)
         {
-            return _categoryRepo.GetById(id);
+            return _mapper.Map<CategoryDto>(_categoryRepo.GetById(id));
         }
 
-        public Category GetProductCategory(int prdId)
+        public CategoryDto GetProductCategory(int prdId)
         {
-            return _categoryRepo.GetAll().FirstOrDefault(c => c.Products.Any(p => p.ProductId == prdId));
+            return _mapper.Map<CategoryDto>(_categoryRepo.GetAll().FirstOrDefault(c => c.Products.Any(p => p.ProductId == prdId)));
         }
 
-        public void Insert(Category category)
+        public void Insert(CategoryDto categoryDto)
         {
-            _categoryRepo.Insert(category);
+            _categoryRepo.Insert(_mapper.Map<Category>(categoryDto));
             _categoryRepo.Save();
 
         }
 
-        public void Update(Category category)
+        public void Update(CategoryDto categoryDto)
         {
-            _categoryRepo.Update(category);
+            _categoryRepo.Update(_mapper.Map<Category>(categoryDto));
             _categoryRepo.Save();
         }
         public void Delete(int id)
@@ -47,9 +52,10 @@ namespace CoreBusiness.Service
             _categoryRepo.Save();
         }
 
-        public IEnumerable<Category> GetAll()
+        public IEnumerable<CategoryDto> GetAll()
         {
-            return _categoryRepo.GetAll();
+            return _categoryRepo.GetAll()
+                                .Select(c => _mapper.Map<CategoryDto>(c));
         }
     }
 }

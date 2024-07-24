@@ -1,9 +1,12 @@
+using AutoMapper;
+using CoreBusiness.Dto;
 using DataAccess.Interface;
 using DataAccess.Entities;
 using DataAccess.EFRepository;
 using Microsoft.AspNetCore.Mvc;
 using CoreBusiness.Interface;
 using CoreBusiness.Service;
+using WebApi.ViewModel;
 
 namespace WebApi.Controllers
 {
@@ -13,16 +16,19 @@ namespace WebApi.Controllers
     public class ProductController : ControllerBase
     {        
         private readonly IProductService _prdService;
+        private readonly IMapper _mapper;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService,
+                                    IMapper mapper)
         {
             _prdService = productService;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get(int prdId)
         {
-            var prd = _prdService.Get(prdId);
+            var prd = _mapper.Map<ProductViewModel>(_prdService.Get(prdId));
 
 
             if (prd == null)
@@ -38,7 +44,8 @@ namespace WebApi.Controllers
         [Route("AllProduct")]
         public IActionResult GetAll()
         {
-            var prds = _prdService.GetAll();
+            var prds = _prdService.GetAll()
+                                    .Select(p => _mapper.Map<ProductViewModel>(p));
 
 
             if (prds == null)
@@ -53,7 +60,8 @@ namespace WebApi.Controllers
         [Route("ProductOfCategory")]
         public IActionResult GetByCategory(int ctgId)
         {
-            var prds = _prdService.GetByCategry(ctgId);
+            var prds = _prdService.GetByCategry(ctgId)
+                                    .Select(p => _mapper.Map<ProductViewModel>(p));
 
 
             if (prds == null)
@@ -73,7 +81,7 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
 
-            _prdService.Insert(product);
+            _prdService.Insert(_mapper.Map<ProductDto>(product));
 
             return Ok();
         }
@@ -86,7 +94,7 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
 
-            _prdService.Update(product);
+            _prdService.Update(_mapper.Map<ProductDto>(product));
 
             return Ok();
         }

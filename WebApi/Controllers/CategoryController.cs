@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using CoreBusiness.Dto;
 using DataAccess.Entities;
 using DataAccess.EFRepository;
 using DataAccess.Interface;
 using Microsoft.AspNetCore.Mvc;
 using CoreBusiness.Interface;
 using CoreBusiness.Service;
+using WebApi.ViewModel;
 
 namespace WebApi.Controllers
 {
@@ -25,7 +27,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public IActionResult Get(int ctgId)
         {
-            Category? ctg = _categoryService.Get(ctgId);
+            CategoryViewModel? ctg = _mapper.Map<CategoryViewModel>(_categoryService.Get(ctgId));
             
 
             if (ctg == null)
@@ -40,31 +42,31 @@ namespace WebApi.Controllers
         [Route("AllProduct")]
         public IActionResult GetAll()
         {
-            var prds = _categoryService.GetAll();
-
-
-            if (prds == null)
+            var productViewModel = _categoryService.GetAll()
+                                        .Select(c => _mapper.Map<CategoryViewModel>(c));
+            
+            if (productViewModel == null)
             {
                 return NotFound();
             }
 
-            return Ok(prds);
+            return Ok(productViewModel);
         }
 
         [HttpGet]
         [Route("ProductCategory")]
         public IActionResult GetByCategory(int ctgId)
         {
-            var prds = _categoryService.GetProductCategory(ctgId);
+            var productViewModel = _mapper.Map<CategoryViewModel>(_categoryService.GetProductCategory(ctgId));
 
 
-            if (prds == null)
+            if (productViewModel == null)
             {
                 return NotFound();
                 //return BadRequest("Invalid ID.");
             }
 
-            return Ok(prds);
+            return Ok(productViewModel);
         }
 
         [HttpPost]
@@ -75,7 +77,7 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
 
-            _categoryService.Insert(category);
+            _categoryService.Insert(_mapper.Map<CategoryDto>(category));
             
             return Ok();
         }
@@ -88,7 +90,7 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
 
-            _categoryService.Update(category);
+            _categoryService.Update(_mapper.Map<CategoryDto>(category));
 
             return Ok();
         }

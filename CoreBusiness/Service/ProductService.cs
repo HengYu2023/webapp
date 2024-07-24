@@ -7,42 +7,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using CoreBusiness.Dto;
 
 namespace CoreBusiness.Service
 {
     public class ProductService : IProductService
     {
         private readonly IRepository<Product> _productRepo;
+        private readonly IMapper _mapper;
 
-        public ProductService(IRepository<Product> productRepo)
+        public ProductService(IRepository<Product> productRepo,
+                                IMapper mapper)
         {
             _productRepo = productRepo;
+            _mapper = mapper;
         }
 
-        public IEnumerable<Product> GetByCategry(int ctgId)
+        public IEnumerable<ProductDto> GetByCategry(int ctgId)
         {
-            return _productRepo.GetAll().Where(p => p.CategoryId == ctgId);
+            return _productRepo.GetAll()
+                                .Where(p => p.CategoryId == ctgId)
+                                .Select(p => _mapper.Map<ProductDto>(p));
         }
 
-        public Product Get(int id)
+        public ProductDto Get(int id)
         {
-            return _productRepo.GetById(id);
+            return _mapper.Map<ProductDto>(_productRepo.GetById(id));
         }
 
-        public IEnumerable<Product> GetAll()
+        public IEnumerable<ProductDto> GetAll()
         {
-            return _productRepo.GetAll();
+            return _productRepo.GetAll()
+                                .Select(p => _mapper.Map<ProductDto>(p));
         }
 
-        public void Insert(Product product)
+        public void Insert(ProductDto productDto)
         {
-            _productRepo.Insert(product);
+            _productRepo.Insert(_mapper.Map<Product>(productDto));
             _productRepo.Save();
         }
 
-        public void Update(Product product)
+        public void Update(ProductDto productDto)
         {
-            _productRepo.Update(product);
+            _productRepo.Update(_mapper.Map<Product>(productDto));
             _productRepo.Save();
         }
         public void Delete(int id)
