@@ -25,9 +25,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get(int ctgId)
+        public IActionResult Get(int categoryId)
         {
-            CategoryViewModel? ctg = _mapper.Map<CategoryViewModel>(_categoryService.Get(ctgId));
+            CategoryViewModel? ctg = _mapper.Map<CategoryViewModel>(_categoryService.Get(categoryId));
             
 
             if (ctg == null)
@@ -39,25 +39,25 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("AllProduct")]
+        [Route("AllCategory")]
         public IActionResult GetAll()
         {
-            var productViewModel = _categoryService.GetAll()
+            var categoryViewModel = _categoryService.GetAll()
                                         .Select(c => _mapper.Map<CategoryViewModel>(c));
             
-            if (productViewModel == null)
+            if (categoryViewModel == null)
             {
                 return NotFound();
             }
 
-            return Ok(productViewModel);
+            return Ok(categoryViewModel);
         }
 
         [HttpGet]
         [Route("ProductCategory")]
-        public IActionResult GetByCategory(int ctgId)
+        public IActionResult GetByProduct(int productId)
         {
-            var productViewModel = _mapper.Map<CategoryViewModel>(_categoryService.GetProductCategory(ctgId));
+            var productViewModel = _mapper.Map<CategoryViewModel>(_categoryService.GetProductCategory(productId));
 
 
             if (productViewModel == null)
@@ -96,11 +96,11 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete(int ctgId)
+        public IActionResult Delete(int categoryId)
         {
-            _categoryService.Delete(ctgId);
+            _categoryService.Delete(categoryId);
 
-            return Ok($"Remove {ctgId} category.");
+            return Ok($"Remove {categoryId} category.");
         }
     }
 }

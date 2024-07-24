@@ -10,11 +10,11 @@ namespace CoreBusiness.Interface
 {
     public interface ICategoryService
     {
-        CategoryDto Get(int id);
+        CategoryDto Get(int categoryId);
         IEnumerable<CategoryDto> GetAll();
         CategoryDto GetProductCategory(int productId);
         void Insert(CategoryDto category);
         void Update(CategoryDto categoryDto);
-        void Delete(int id);
+        void Delete(int categoryId);
     }
 }

@@ -26,9 +26,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get(int prdId)
+        public IActionResult Get(int productId)
         {
-            var prd = _mapper.Map<ProductViewModel>(_prdService.Get(prdId));
+            var prd = _mapper.Map<ProductViewModel>(_prdService.Get(productId));
 
 
             if (prd == null)
@@ -44,33 +44,33 @@ namespace WebApi.Controllers
         [Route("AllProduct")]
         public IActionResult GetAll()
         {
-            var prds = _prdService.GetAll()
+            var products = _prdService.GetAll()
                                     .Select(p => _mapper.Map<ProductViewModel>(p));
 
 
-            if (prds == null)
+            if (products == null)
             {
                 return NotFound();
             }
 
-            return Ok(prds);
+            return Ok(products);
         }
 
         [HttpGet]
         [Route("ProductOfCategory")]
-        public IActionResult GetByCategory(int ctgId)
+        public IActionResult GetByCategory(int categoryId)
         {
-            var prds = _prdService.GetByCategry(ctgId)
+            var products = _prdService.GetByCategory(categoryId)
                                     .Select(p => _mapper.Map<ProductViewModel>(p));
 
 
-            if (prds == null)
+            if (products == null)
             {
                 return NotFound();
                 //return BadRequest("Invalid ID.");
             }
 
-            return Ok(prds);
+            return Ok(products);
         }
 
         [HttpPost]
@@ -100,11 +100,11 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete(int prdId)
+        public IActionResult Delete(int productId)
         {
-            _prdService.Delete(prdId);
+            _prdService.Delete(productId);
 
-            return Ok($"Remove {prdId} product.");
+            return Ok($"Remove {productId} product.");
         }
     }
 }

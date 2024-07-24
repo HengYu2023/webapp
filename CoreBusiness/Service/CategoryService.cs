@@ -24,14 +24,15 @@ namespace CoreBusiness.Service
             _mapper = mapper;
         }
 
-        public CategoryDto Get(int id)
+        public CategoryDto Get(int categoryId)
         {
-            return _mapper.Map<CategoryDto>(_categoryRepo.GetById(id));
+            return _mapper.Map<CategoryDto>(_categoryRepo.GetById(categoryId));
         }
 
         public CategoryDto GetProductCategory(int prdId)
         {
-            return _mapper.Map<CategoryDto>(_categoryRepo.GetAll().FirstOrDefault(c => c.Products.Any(p => p.ProductId == prdId)));
+            return _mapper.Map<CategoryDto>(_categoryRepo.GetAll()
+                                                            .FirstOrDefault(c => c.Products.Any(p => p.ProductId == prdId)));
         }
 
         public void Insert(CategoryDto categoryDto)
@@ -46,9 +47,9 @@ namespace CoreBusiness.Service
             _categoryRepo.Update(_mapper.Map<Category>(categoryDto));
             _categoryRepo.Save();
         }
-        public void Delete(int id)
+        public void Delete(int categoryId)
         {
-            _categoryRepo.Delete(id);
+            _categoryRepo.Delete(categoryId);
             _categoryRepo.Save();
         }
 

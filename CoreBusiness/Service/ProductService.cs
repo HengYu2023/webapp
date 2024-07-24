@@ -24,16 +24,16 @@ namespace CoreBusiness.Service
             _mapper = mapper;
         }
 
-        public IEnumerable<ProductDto> GetByCategry(int ctgId)
+        public IEnumerable<ProductDto> GetByCategory(int categoryId)
         {
             return _productRepo.GetAll()
-                                .Where(p => p.CategoryId == ctgId)
+                                .Where(p => p.CategoryId == categoryId)
                                 .Select(p => _mapper.Map<ProductDto>(p));
         }
 
-        public ProductDto Get(int id)
+        public ProductDto Get(int productId)
         {
-            return _mapper.Map<ProductDto>(_productRepo.GetById(id));
+            return _mapper.Map<ProductDto>(_productRepo.GetById(productId));
         }
 
         public IEnumerable<ProductDto> GetAll()
@@ -53,9 +53,9 @@ namespace CoreBusiness.Service
             _productRepo.Update(_mapper.Map<Product>(productDto));
             _productRepo.Save();
         }
-        public void Delete(int id)
+        public void Delete(int productId)
         {
-            _productRepo.Delete(id);
+            _productRepo.Delete(productId);
             _productRepo.Save();
         }        
     }
