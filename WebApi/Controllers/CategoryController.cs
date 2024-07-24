@@ -1,4 +1,5 @@
-﻿using DataAccess.Entities;
+﻿using AutoMapper;
+using DataAccess.Entities;
 using DataAccess.EFRepository;
 using DataAccess.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,13 @@ namespace WebApi.Controllers
     public class CategoryController : ControllerBase
     {        
         private readonly ICategoryService _categoryService;
+        private readonly IMapper _mapper;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService,
+                                    IMapper mapper)
         {
             _categoryService = categoryService;
+            _mapper = mapper;
         }
 
         [HttpGet]
