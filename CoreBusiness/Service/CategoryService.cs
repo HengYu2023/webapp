@@ -15,12 +15,15 @@ namespace CoreBusiness.Service
     public class CategoryService : ICategoryService
     {
         private readonly IRepository<Category> _categoryRepo;
+        private readonly IRepository<Product> _productRepo;
         private readonly IMapper _mapper;
 
         public CategoryService(IRepository<Category> categoryRepo,
+                                IRepository<Product> productRepo,
                                 IMapper mapper)
         {
             _categoryRepo = categoryRepo;
+            _productRepo = productRepo;
             _mapper = mapper;
         }
 
@@ -29,10 +32,16 @@ namespace CoreBusiness.Service
             return _mapper.Map<CategoryDto>(_categoryRepo.GetById(categoryId));
         }
 
-        public CategoryDto GetProductCategory(int prdId)
+        public CategoryDto GetProductCategory(int productId)
         {
-            return _mapper.Map<CategoryDto>(_categoryRepo.GetAll()
-                                                            .FirstOrDefault(c => c.Products.Any(p => p.ProductId == prdId)));
+            var categoryId = _mapper.Map<ProductDto>(_productRepo.GetById(productId))?.CategoryId;
+
+            if (categoryId == null)
+            {
+                return new CategoryDto();
+            }
+
+            return _mapper.Map<CategoryDto>(_categoryRepo.GetById((int)categoryId));
         }
 
         public void Insert(CategoryDto categoryDto)

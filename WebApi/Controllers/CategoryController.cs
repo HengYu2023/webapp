@@ -57,16 +57,16 @@ namespace WebApi.Controllers
         [Route("ProductCategory")]
         public IActionResult GetByProduct(int productId)
         {
-            var productViewModel = _mapper.Map<CategoryViewModel>(_categoryService.GetProductCategory(productId));
+            var categoryViewModel = _mapper.Map<CategoryViewModel>(_categoryService.GetProductCategory(productId));
 
 
-            if (productViewModel == null)
+            if (categoryViewModel == null || categoryViewModel.CategoryId == 0)
             {
                 return NotFound();
                 //return BadRequest("Invalid ID.");
             }
 
-            return Ok(productViewModel);
+            return Ok(categoryViewModel);
         }
 
         [HttpPost]
