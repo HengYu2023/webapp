@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var str = builder.Configuration["ConnectionStrings:NorthwindConnection"];
 
-builder.Services.AddDbContext<NorthwindContext>(options=> options.UseSqlServer(str));
+builder.Services.AddDbContext<DbContext,NorthwindContext>(options=> options.UseSqlServer(str));
 
 builder.Services.AddAutoMapper(option =>
     {

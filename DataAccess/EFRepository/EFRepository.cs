@@ -11,12 +11,12 @@ namespace DataAccess.EFRepository
 {
     public class EFRepository<T> : IRepository<T>, IDisposable where T : BaseEntity
     {
-        private readonly NorthwindContext _context;
+        private readonly DbContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public EFRepository(NorthwindContext northwindContext)
+        public EFRepository(DbContext context)
         {
-            _context = northwindContext;
+            _context = context;
             _dbSet = _context.Set<T>();
         }
         public T GetById(int id)
