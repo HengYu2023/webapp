@@ -2,7 +2,7 @@ using AutoMapper;
 using CoreBusiness.Dto;
 using DataAccess.Interface;
 using DataAccess.Entities;
-using DataAccess.EFRepository;
+using DataAccess.Repository;
 using Microsoft.AspNetCore.Mvc;
 using CoreBusiness.Interface;
 using CoreBusiness.Service;

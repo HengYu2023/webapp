@@ -1,17 +1,19 @@
 using CoreBusiness.BusinessMapping;
 using CoreBusiness.Interface;
 using CoreBusiness.Service;
-using DataAccess.EFRepository;
+using DataAccess.Repository;
 using DataAccess.Entities;
+using DataAccess.Helper;
 using DataAccess.Interface;
 using Microsoft.EntityFrameworkCore;
 using WebApi.PresentationMapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var str = builder.Configuration["ConnectionStrings:NorthwindConnection"];
+var str = builder.Configuration["ConnectionStrings:NorthwindConnection"]??"";
 
 builder.Services.AddDbContext<DbContext,NorthwindContext>(options=> options.UseSqlServer(str));
+builder.Services.AddScoped<IDbHelper,DapperDbHelper>(provider => new DapperDbHelper(str));
 
 builder.Services.AddAutoMapper(option =>
     {

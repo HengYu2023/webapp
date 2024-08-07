@@ -1,5 +1,5 @@
 ﻿using CoreBusiness.Interface;
-using DataAccess.EFRepository;
+using DataAccess.Repository;
 using DataAccess.Entities;
 using DataAccess.Interface;
 using System;

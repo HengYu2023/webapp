@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.EFRepository
+namespace DataAccess.Repository
 {
     public class EFRepository<T> : IRepository<T>, IDisposable where T : BaseEntity
     {
