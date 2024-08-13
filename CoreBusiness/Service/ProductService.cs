@@ -14,12 +14,16 @@ namespace CoreBusiness.Service
 {
     public class ProductService : IProductService
     {
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Product> _productRepo;
         private readonly IMapper _mapper;
 
         public ProductService(IRepository<Product> productRepo,
+                                IUnitOfWork unitOfWork,
                                 IMapper mapper)
         {
+            _unitOfWork = unitOfWork;
+            //_productRepo = _unitOfWork.GetRepository<Product>();
             _productRepo = productRepo;
             _mapper = mapper;
         }

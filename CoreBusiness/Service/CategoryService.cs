@@ -9,21 +9,27 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using CoreBusiness.Dto;
+using DataAccess.UnitOfWork;
 
 namespace CoreBusiness.Service
 {
     public class CategoryService : ICategoryService
     {
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Category> _categoryRepo;
         private readonly IRepository<Product> _productRepo;
         private readonly IMapper _mapper;
 
         public CategoryService(IRepository<Category> categoryRepo,
                                 IRepository<Product> productRepo,
+                                IUnitOfWork unitOfWork,
                                 IMapper mapper)
         {
+            _unitOfWork = unitOfWork;
             _categoryRepo = categoryRepo;
             _productRepo = productRepo;
+            //_categoryRepo = _unitOfWork.GetRepository<Category>();
+            //_productRepo = _unitOfWork.GetRepository<Product>();
             _mapper = mapper;
         }
 

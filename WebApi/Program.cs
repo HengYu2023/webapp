@@ -7,13 +7,17 @@ using DataAccess.Helper;
 using DataAccess.Interface;
 using Microsoft.EntityFrameworkCore;
 using WebApi.PresentationMapping;
+using DataAccess.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var str = builder.Configuration["ConnectionStrings:NorthwindConnection"]??"";
+var connectionKey = "ConnectionStrings:NorthwindConnection";
 
-builder.Services.AddDbContext<DbContext,NorthwindContext>(options=> options.UseSqlServer(str));
-builder.Services.AddScoped<IDbHelper,DapperDbHelper>(provider => new DapperDbHelper(str));
+builder.Services.AddDbContext<DbContext, NorthwindContext>(options=> 
+    options.UseSqlServer(builder.Configuration[connectionKey]));
+
+builder.Services.AddScoped<IDbHelper,DapperDbHelper>(provider => 
+    new DapperDbHelper(builder.Configuration[connectionKey] ?? ""));
 
 builder.Services.AddAutoMapper(option =>
     {
@@ -22,8 +26,26 @@ builder.Services.AddAutoMapper(option =>
     });
 //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddScoped<IRepository<Product>,EFRepository<Product>>();
-builder.Services.AddScoped<IRepository<Category>,EFRepository<Category>>();
+builder.Services.AddScoped<IUnitOfWork, EFUnitOfWork>();
+builder.Services.AddScoped<IRepository<Product>, EFRepository<Product>>
+    (provider =>
+        {
+            IUnitOfWork uow = (IUnitOfWork)provider.GetService(typeof(IUnitOfWork));
+            return (EFRepository<Product>)uow.GetRepository<Product>();
+        }
+    );
+
+builder.Services.AddScoped<IRepository<Category>, EFRepository<Category>>
+    (provider =>
+        {
+            IUnitOfWork uow = (IUnitOfWork)provider.GetService(typeof(IUnitOfWork));
+            return (EFRepository<Category>)uow.GetRepository<Category>();
+        }
+    );
+
+
+//builder.Services.AddScoped<IRepository<Product>,EFRepository<Product>>();
+//builder.Services.AddScoped<IRepository<Category>,EFRepository<Category>>();
 builder.Services.AddScoped<ICategoryService,CategoryService>();
 builder.Services.AddScoped<IProductService,ProductService>();
 
